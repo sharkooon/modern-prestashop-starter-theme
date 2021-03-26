@@ -22,7 +22,7 @@ const plugins = (purge) => ([
 ].filter(el => el && el));
 
 exports.productionConfig = ({ purge }) => ({
-  devtool: '(none)',
+  devtool: false,
   optimization: {
     minimize: true,
     minimizer: [

@@ -7,12 +7,7 @@ exports.configureDevServer = (serverAddress, publicPath, port, siteURL) => ({
   host: serverAddress,
   hot: true,
   open: true,
-  overlay: true,
   port,
-  publicPath,
-  writeToDisk: (filePath) => {
-    return !(/hot-update/.test(filePath));
-  },
   proxy: {
     '**': {
       target: siteURL,
@@ -25,26 +20,33 @@ exports.configureDevServer = (serverAddress, publicPath, port, siteURL) => ({
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
     'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
   },
-  before(app, server) {
-    const files = [
-      '../../**/*.tpl',
-      '../../modules/**/*.js',
-      '../../modules/**/*.css'
-    ];
+  dev: {
+    publicPath,
+    writeToDisk: (filePath) => {
+      return !(/hot-update/.test(filePath));
+    },
+    // before: (app, server) => {
+    //   const files = [
+    //     '../../**/*.tpl',
+    //     '../../modules/**/*.js',
+    //     '../../modules/**/*.css'
+    //   ];
 
-    chokidar
-      .watch(files, {
-        alwaysStat: true,
-        atomic: false,
-        followSymlinks: false,
-        ignoreInitial: true,
-        ignorePermissionErrors: true,
-        persistent: true
-      })
-      .on("all", () => {
-        server.sockWrite(server.sockets, "content-changed");
-      });
-  }
+    //   chokidar
+    //     .watch(files, {
+    //       alwaysStat: true,
+    //       atomic: false,
+    //       followSymlinks: false,
+    //       ignoreInitial: true,
+    //       ignorePermissionErrors: true,
+    //       persistent: true
+    //     })
+    //     .on("all", () => {
+    //       server.sockWrite(server.sockets, "content-changed");
+    //     });
+    // },
+  },
+
 });
 
 exports.extractScss = ({mode = 'production'}) => ({
@@ -52,12 +54,7 @@ exports.extractScss = ({mode = 'production'}) => ({
     rules: [{
       test: /\.scss$/,
       use: [
-        {
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            hmr: true
-          }
-        },
+        MiniCssExtractPlugin.loader,
         'css-loader',
         {
           loader: 'postcss-loader',
@@ -104,12 +101,16 @@ exports.extractImages = ({ publicPath }) => ({
     rules: [
       {
         test: /\.(png|jpg|gif)$/,
-        loader: 'file-loader',
-        options: {
-          outputPath: 'img/',
-          publicPath: publicPath + '/img/',
-          name: '[name].[ext]',
-        },
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: 'img/',
+              publicPath: publicPath + '/img/',
+              name: '[name].[ext]',
+            },
+          },
+        ]
       },
     ]
   }
@@ -120,12 +121,16 @@ exports.extractFonts = ({ publicPath }) => ({
     rules: [
       {
         test: /\.(woff|woff2|ttf|eot)$/,
-        loader: 'file-loader',
-        options: {
-          outputPath: 'fonts/',
-          publicPath: publicPath + '/fonts/',
-          name: '[name].[ext]'
-        },
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: 'fonts/',
+              publicPath: publicPath + '/fonts/',
+              name: '[name].[ext]'
+            },
+          },
+        ]
       }
     ]
   }
