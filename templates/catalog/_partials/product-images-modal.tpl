@@ -27,45 +27,43 @@
     <div class="modal-content">
       <div class="modal-body">
         <div class="js-modal-gallery modal-gallery swiper-container swiper-container-custom">
-
-        {if $product.images|count > 1}
-          <div class="modal-gallery__list swiper-wrapper">
-
-            <div class="swiper-slide modal-gallery__elem">
-              <img
-                class="rounded img-fluid lazyload"
-                {generateImagesSources image=$product.default_image size='large_default' lazyload=false}
-                width="{$product.default_image.bySize.large_default.width}"
-                height="{$product.default_image.bySize.large_default.height}"
-                {if !empty($product.default_image.legend)}
-                  alt="{$product.default_image.legend}"
-                  title="{$product.default_image.legend}"
-                {else}
-                  alt="{$product.name}"
-                {/if}
-                loading="lazy">
-            </div>
-
-            {foreach from=$product.images item=image}
-              {if $image.id_image === $product.default_image.id_image}
-                {continue}
-              {/if}
-
+          {if $product.images|count > 1}
+            <div class="modal-gallery__list swiper-wrapper">
               <div class="swiper-slide modal-gallery__elem">
                 <img
                   class="rounded img-fluid lazyload"
-                  {generateImagesSources image=$image size='large_default' lazyload=true}
-                  width="{$image.bySize.large_default.width}"
-                  height="{$image.bySize.large_default.height}"
+                  {generateImagesSources image=$product.default_image size='large_default' lazyload=false}
+                  width="{$product.default_image.bySize.large_default.width}"
+                  height="{$product.default_image.bySize.large_default.height}"
                   {if !empty($product.default_image.legend)}
-                    alt="{$image.legend}" title="{$image.legend}"
+                    alt="{$product.default_image.legend}"
+                    title="{$product.default_image.legend}"
                   {else}
                     alt="{$product.name}"
                   {/if}
                   loading="lazy">
               </div>
-            {/foreach}
-          </div>
+
+              {foreach from=$product.images item=image}
+                {if $image.id_image === $product.default_image.id_image}
+                  {continue}
+                {/if}
+
+                <div class="swiper-slide modal-gallery__elem">
+                  <img
+                    class="rounded img-fluid lazyload"
+                    {generateImagesSources image=$image size='large_default' lazyload=true}
+                    width="{$image.bySize.large_default.width}"
+                    height="{$image.bySize.large_default.height}"
+                    {if !empty($product.default_image.legend)}
+                      alt="{$image.legend}" title="{$image.legend}"
+                    {else}
+                      alt="{$product.name}"
+                    {/if}
+                    loading="lazy">
+                </div>
+              {/foreach}
+            </div>
 
             <div class="swiper-button-prev swiper-button-custom">
               <span class="sr-only">{l s='Previous' d='Shop.Theme.Actions'}</span>
@@ -75,23 +73,8 @@
               <span class="sr-only">{l s='Next' d='Shop.Theme.Actions'}</span>
               <span class="material-icons">keyboard_arrow_right</span>
             </div>
-          {else}
-            <img
-              class="rounded img-fluid"
-              {generateImagesSources image=$product.default_image size='large_default' lazyload=false}
-              width="{$product.default_image.bySize.large_default.width}"
-              height="{$product.default_image.bySize.large_default.height}"
-              {if !empty($product.default_image.legend)}
-                alt="{$product.default_image.legend}"
-                title="{$product.default_image.legend}"
-              {else}
-                alt="{$product.name}"
-              {/if}
-              loading="lazy">
           {/if}
-
         </div>
-
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
