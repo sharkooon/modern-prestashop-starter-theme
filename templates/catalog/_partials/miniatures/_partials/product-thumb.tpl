@@ -5,14 +5,14 @@
         {if $product.default_image}
           data-full-size-image-url="{$product.default_image.large.url}"
           {generateImagesSources image=$product.default_image size='home_default'}
-          {else}
+        {else}
           src="{$urls.no_picture_image.bySize.home_default.url}"
         {/if}
         alt="{if !empty($product.default_image.legend)}{$product.default_image.legend}{else}{$product.name|truncate:30:'...'}{/if}"
         loading="lazy"
         class="img-fluid rounded lazyload"
-        width="{$product.default_image.bySize.home_default.width}"
-        height="{$product.default_image.bySize.home_default.height}"
+        width="{if empty($product.default_image)}{$urls.no_picture_image.bySize.home_default.width}{else}{$product.default_image.bySize.home_default.width}{/if}"
+        height="{if empty($product.default_image)}{$urls.no_picture_image.bySize.home_default.height}{else}{$product.default_image.bySize.home_default.height}{/if}"
         />
 
       {include file='catalog/_partials/product-flags.tpl'}
@@ -23,7 +23,6 @@
         <i class="material-icons product-miniature__quick-view-icon">visibility</i>
       </a>
     {/block}
-
 
     {block name='product_reviews'}
       {hook h='displayProductListReviews' product=$product}
